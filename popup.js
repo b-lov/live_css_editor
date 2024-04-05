@@ -23,6 +23,24 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Save CSS to storage
 	document.getElementById("saveBtn").addEventListener("click", () => {
 		const cssCode = document.getElementById("cssCode").value;
+		// remove key if cssCode is empty
+		if (cssCode === "") {
+			chrome.storage.local.remove(currentDomain, () => {
+				console.log("CSS removed for " + currentDomain);
+				// Optionally, send a message to content scripts to remove the CSS immediately
+				chrome.tabs.query(
+					{ active: true, currentWindow: true },
+					function (tabs) {
+						chrome.tabs.sendMessage(tabs[0].id, {
+							action: "applyCSS",
+							css: cssCode,
+							domain: currentDomain,
+						});
+					}
+				);
+			});
+			return;
+		}
 		chrome.storage.local.set({ [currentDomain]: cssCode }, () => {
 			console.log("CSS saved for " + currentDomain);
 			// Optionally, send a message to content scripts to apply the CSS immediately
