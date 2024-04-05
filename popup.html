@@ -3,13 +3,23 @@
 	<head>
 		<title>Live CSS Editor</title>
 		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 10px;
+			}
+			#domain {
+				font-size: 14px;
+				margin-bottom: 5px;
+			}
 			textarea {
-				width: 300px;
+				width: 280px;
 				height: 200px;
+				margin-top: 5px;
 			}
 		</style>
 	</head>
 	<body>
+		<div id="domain">Loading...</div>
 		<textarea id="cssCode"></textarea>
 		<button id="saveBtn">Save</button>
 		<script src="popup.js"></script>

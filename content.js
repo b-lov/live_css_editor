@@ -1,6 +1,6 @@
 // Function to apply CSS
 function applyCss(css) {
-	let styleTag =
+	const styleTag =
 		document.getElementById("liveCssEditorStyle") ||
 		document.createElement("style");
 	styleTag.id = "liveCssEditorStyle";
@@ -8,16 +8,19 @@ function applyCss(css) {
 	document.head.appendChild(styleTag);
 }
 
-// Apply saved CSS on page load
-chrome.storage.local.get(["css"], function (result) {
-	if (result.css) {
-		applyCss(result.css);
+// Get the current domain
+const currentDomain = window.location.hostname;
+
+// Apply saved CSS on page load for the current domain
+chrome.storage.local.get([currentDomain], function (result) {
+	if (result[currentDomain]) {
+		applyCss(result[currentDomain]);
 	}
 });
 
 // Listen for messages to update CSS dynamically
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-	if (request.action === "applyCSS") {
+	if (request.action === "applyCSS" && request.domain === currentDomain) {
 		applyCss(request.css);
 	}
 });
