@@ -14,14 +14,14 @@ const applyCss = (css) => {
 
 const currentDomain = window.location.hostname;
 
-// Apply saved CSS on page load for the current domain
-chrome.storage.local.get([currentDomain], (result) => {
-	if (result[currentDomain]) applyCss(result[currentDomain]);
-});
-
 // Listen for messages to update CSS dynamically
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	if (request.action === "applyCSS" && request.domain === currentDomain) {
 		applyCss(request.css);
 	}
+});
+
+// Apply saved CSS on page load for the current domain
+chrome.storage.local.get([currentDomain], (result) => {
+	if (result[currentDomain]) applyCss(result[currentDomain]);
 });
